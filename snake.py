@@ -20,6 +20,7 @@ startPos = [100, 50]
 body = [[100,50], [90,50], [80,50]]
 foodPos = [random.randrange(1, 70)*10, random.randrange(1, 50)*10]
 food = True
+score = 0
 
 direction = 'RIGHT'
 onChange = direction
@@ -31,11 +32,21 @@ def gameOver():
 	endRect = endMessage.get_rect()
 	endRect.midtop = (350, 25)
 	gameScreen.blit(endMessage, endRect)
+	scoreBoard(0)
 	pygame.display.flip()
 	time.sleep(2)
 	pygame.quit()
 	sys.exit()
 
+def scoreBoard(choice=1):
+	scoreFont = pygame.font.SysFont('Monaco', 24)
+	scoreMessage = scoreFont.render('Score: {0}'.format(score), True, black)
+	scoreRect = scoreMessage.get_rect()
+	if choice == 1:
+		scoreRect.midtop = (70, 10)
+	else:
+		scoreRect.midtop = (360, 120)
+	gameScreen.blit(scoreMessage, scoreRect)
 
 # Game
 while True:
@@ -77,6 +88,7 @@ while True:
 	body.insert(0, list(startPos))
 	if startPos[0] == foodPos[0] and startPos[1] == foodPos[1]:
 		food = False
+		score +=1
 	else:
 		body.pop()
 
@@ -100,5 +112,8 @@ while True:
 		if startPos[0] == block[0] and startPos[1] == block[1]:
 			gameOver()
 
+	scoreBoard()
+
 	pygame.display.flip()
+	
 	fpsController.tick(20)
